@@ -49,7 +49,7 @@ fn part2(matrix: *std.ArrayList(std.ArrayList(u32))) void {
         }
     }
 
-    std.debug.print("Safe Lists: {}\n", .{number_of_safe_lists});
+    std.debug.print("Safe Lists V2: {}\n", .{number_of_safe_lists});
 }
 
 fn part1(matrix: *std.ArrayList(std.ArrayList(u32))) void {
@@ -61,5 +61,5 @@ fn part1(matrix: *std.ArrayList(std.ArrayList(u32))) void {
         }
     }
 
-    std.debug.print("Safe Lists: {}\n", .{number_of_safe_lists});
+    std.debug.print("Safe Lists V1: {}\n", .{number_of_safe_lists});
 }

@@ -27,11 +27,10 @@ pub fn isListSafeV2(list: *std.ArrayList(u32), refurbished: bool) bool {
                     if (!refurbished) {
                         var temp_list = list;
                         _ = temp_list.orderedRemove(next);
-                        const removed_value = list.orderedRemove(i);
-                        std.debug.print("Removed Value Ascending: {}\n", .{removed_value});
+                        _ = list.orderedRemove(i);
+
                         return isListSafeV2(list, true) or isListSafeV2(temp_list, true);
                     } else {
-                        std.debug.print("Failed With {}\n\n", .{list});
                         return false;
                     }
                 }
@@ -40,11 +39,10 @@ pub fn isListSafeV2(list: *std.ArrayList(u32), refurbished: bool) bool {
                     if (!refurbished) {
                         var temp_list = list;
                         _ = temp_list.orderedRemove(next);
-                        const removed_value = list.orderedRemove(i);
-                        std.debug.print("Removed Value Ascending: {}\n", .{removed_value});
+                        _ = list.orderedRemove(i);
+
                         return isListSafeV2(list, true) or isListSafeV2(temp_list, true);
                     } else {
-                        std.debug.print("Failed With {}\n\n", .{list});
                         return false;
                     }
                 }
@@ -59,11 +57,10 @@ pub fn isListSafeV2(list: *std.ArrayList(u32), refurbished: bool) bool {
                 if (!refurbished) {
                     var temp_list = list;
                     _ = temp_list.orderedRemove(next);
-                    const removed_value = list.orderedRemove(i);
-                    std.debug.print("Removed Value Ascending: {}\n", .{removed_value});
+                    _ = list.orderedRemove(i);
+
                     return isListSafeV2(list, true) or isListSafeV2(temp_list, true);
                 } else {
-                    std.debug.print("Failed With {}\n\n", .{list});
                     return false;
                 }
             }
