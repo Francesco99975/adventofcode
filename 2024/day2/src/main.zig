@@ -34,6 +34,25 @@ pub fn main() !void {
         try matrix.append(row);
     }
 
+    part1(&matrix);
+
+    part2(&matrix);
+}
+
+fn part2(matrix: *std.ArrayList(std.ArrayList(u32))) void {
+    var number_of_safe_lists: u32 = 0;
+
+    for (matrix.items) |list| {
+        var mutable_list = list;
+        if (validator.isListSafeV2(&mutable_list, false)) {
+            number_of_safe_lists += 1;
+        }
+    }
+
+    std.debug.print("Safe Lists: {}\n", .{number_of_safe_lists});
+}
+
+fn part1(matrix: *std.ArrayList(std.ArrayList(u32))) void {
     var number_of_safe_lists: u32 = 0;
 
     for (matrix.items) |list| {
