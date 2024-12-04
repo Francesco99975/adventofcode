@@ -74,6 +74,24 @@ pub fn Queue(comptime Child: type) type {
 
             return op.items;
         }
+
+        pub fn getViewV3(this: *This, len: usize) std.ArrayList(Child) {
+            const allocator = std.heap.page_allocator;
+
+            var view: std.ArrayList(Child) = std.ArrayList(Child).init(allocator);
+            var index: usize = 0;
+
+            var tmp = this.start;
+
+            while (tmp) |current| {
+                if (index == len) break;
+                view.append(current.data) catch break;
+                index += 1;
+                tmp = current.next;
+            }
+
+            return view;
+        }
     };
 }
 
