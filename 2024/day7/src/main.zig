@@ -5,7 +5,7 @@ const Calculation = @import("models/calculations.zig").Calculation;
 
 pub fn main() !void {
     const allocator = std.heap.page_allocator;
-    const file = try std.fs.cwd().openFile("data.txt", .{});
+    const file = try std.fs.cwd().openFile("test.txt", .{});
 
     const stream = file.reader();
 
@@ -26,10 +26,8 @@ pub fn main() !void {
 
         while (tokenizer.next()) |token| {
             const part: u64 = try std.fmt.parseInt(u64, token, 10);
-            try calculation.values.push(part);
+            try calculation.values.enqueue(part);
         }
-
-        calculation.values.reverse();
 
         const result = try expressions.getOrPut(sum);
         if(result.found_existing) std.debug.print("This Ain't it Chief", .{});
@@ -40,6 +38,8 @@ pub fn main() !void {
 
     var sum_of_valid_values: u64 = 0;
 
+    var sum_of_valid_values_with_concat: u64 = 0;
+
 
     while (it.next()) |expression| {
        try generator.generatePossibleOperations(expression.value_ptr.*.values.size - 1, &expression.value_ptr.*.operations, &allocator); 
@@ -49,15 +49,25 @@ pub fn main() !void {
             sum_of_valid_values += expression.key_ptr.*;
         }
 
-       for(expression.value_ptr.*.operations.items) |op| {
-        
-        for(op.items) |char| {
-            std.debug.print(" {c}", .{ char });
-        }
-         std.debug.print("\n", .{});
-       }
-       std.debug.print("\n", .{});
+        expression.value_ptr.operations.clearRetainingCapacity();
     }
 
+    it.reset();
+
+    std.debug.print("\nRESETTING\n\n", .{});
+
+    while (it.next()) |expression| {
+       try generator.generatePossibleOperationsV2(expression.value_ptr.*.values.size - 1, &expression.value_ptr.*.operations, &allocator); 
+       std.debug.print("SUM {} OPS:\n", .{expression.key_ptr.* });
+
+        if(try expression.value_ptr.isSummableTo(expression.key_ptr.*, &allocator)) {
+            sum_of_valid_values_with_concat += expression.key_ptr.*;
+        }
+
+        expression.value_ptr.operations.clearAndFree();
+    }
+    
+
     std.debug.print("<PART 1> SUM OF VALID VALUES: {}\n", .{ sum_of_valid_values });
+     std.debug.print("<PART 2> SUM OF VALID VALUES WITH CONCAT: {}\n", .{ sum_of_valid_values_with_concat });
 }

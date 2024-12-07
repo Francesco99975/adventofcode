@@ -1,31 +1,30 @@
 const std = @import("std");
 const symbols = @import("../constants/symbols.zig");
 const converter = @import("../utils/converter.zig");
-const Stack =  @import("stack.zig").Stack;
+const Queue =  @import("queue.zig").Queue;
 
 pub fn Calculation() type {
   return struct {
     const This = @This();
 
-    values: Stack(u64),
+    values: Queue(u64),
     operations: std.ArrayList(std.ArrayList(u8)),
 
     pub fn init(allocator: *const std.mem.Allocator) This {
       return This {
-        .values = Stack(u64).init(allocator),
+        .values = Queue(u64).init(allocator),
         .operations = std.ArrayList(std.ArrayList(u8)).init(allocator.*),
       };
     }
 
-    pub fn isSummableTo(this: *This, sum: u64, allocator: *std.mem.Allocator) !bool {
+    pub fn isSummableTo(this: *This, sum: u64, allocator: *const std.mem.Allocator) !bool {
       for(this.operations.items) |operation| {
          var tmp_values = try this.values.copy();
-          tmp_values.reverse();
-          var compare_sum: u64 = tmp_values.pop() orelse 0;
+        var compare_sum: u64 = tmp_values.dequeue() orelse 0;
       
          
          var symbol_index: usize = 0;
-          while (tmp_values.pop()) |value| {
+          while (tmp_values.dequeue()) |value| {
               const symbol = operation.items[symbol_index];
    
               if(symbol == symbols.ADDITION) {
@@ -39,14 +38,13 @@ pub fn Calculation() type {
               }
 
               if(symbol == symbols.CONCATENATION) {
-                std.debug.print("DOING FOR SUM({}): {} || {} = {}\n", .{ sum, compare_sum, value, compare_sum * value });
-                compare_sum = converter.concatenate(compare_sum, value, allocator.*);
+                const ex_copmpare_sum = compare_sum; // For visual ONLY
+                compare_sum = try converter.concatenate(compare_sum, value, allocator);
+                std.debug.print("DOING FOR SUM({}): {} || {} = {}\n", .{ sum, ex_copmpare_sum, value, compare_sum });
               }
               symbol_index += 1;
           }
 
-           
-        
 
           std.debug.print("COMPARE_SUM({}) VS SUM({})\n", .{ compare_sum, sum });
 

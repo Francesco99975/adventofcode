@@ -26,10 +26,11 @@ pub fn generatePossibleOperationsV2(len: usize, operations: *std.ArrayList(std.A
     var op = std.ArrayList(u8).init(allocator.*);
     var index: usize = 0;
 
+    var tmp = num;
     for (0..len) |_| {
-      const bit_index = len - 1 - index;
-      const bit = (num >> @intCast(bit_index)) & 1;
-      try op.append(if (bit == 0) symbols.ADDITION else if(bit == 1) symbols.MULTIPLICATION else symbols.CONCATENATION);
+      const digit = tmp % 3;
+      try op.append(if (digit == 0) symbols.ADDITION else if(digit == 1) symbols.MULTIPLICATION else symbols.CONCATENATION);
+      tmp = tmp / 3;
       index += 1;
     }
 
