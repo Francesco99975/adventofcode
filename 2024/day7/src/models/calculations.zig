@@ -7,19 +7,30 @@ pub fn Calculation() type {
   return struct {
     const This = @This();
 
+    allocator: std.mem.Allocator,
     values: Queue(u64),
     operations: std.ArrayList(std.ArrayList(u8)),
 
-    pub fn init(allocator: *const std.mem.Allocator) This {
+    pub fn init(allocator: std.mem.Allocator) This {
       return This {
+        .allocator = allocator,
         .values = Queue(u64).init(allocator),
-        .operations = std.ArrayList(std.ArrayList(u8)).init(allocator.*),
+        .operations = std.ArrayList(std.ArrayList(u8)).init(allocator),
       };
     }
 
-    pub fn isSummableTo(this: *This, sum: u64, allocator: *const std.mem.Allocator) !bool {
+    pub fn deinit(this: *This) void {
+      for (this.operations.items) |op| {
+          op.deinit();
+      }
+      this.operations.deinit();
+      this.values.deinit(); // Ensure the queue is properly cleared
+  }
+
+    pub fn isSummableTo(this: *This, sum: u64) !bool {
       for(this.operations.items) |operation| {
          var tmp_values = try this.values.copy();
+         defer tmp_values.deinit();
         var compare_sum: u64 = tmp_values.dequeue() orelse 0;
       
          
@@ -39,7 +50,7 @@ pub fn Calculation() type {
 
               if(symbol == symbols.CONCATENATION) {
                 const ex_copmpare_sum = compare_sum; // For visual ONLY
-                compare_sum = try converter.concatenate(compare_sum, value, allocator);
+                compare_sum = try converter.concatenate(compare_sum, value, this.allocator);
                 std.debug.print("DOING FOR SUM({}): {} || {} = {}\n", .{ sum, ex_copmpare_sum, value, compare_sum });
               }
               symbol_index += 1;

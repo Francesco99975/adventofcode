@@ -1,11 +1,11 @@
 const std = @import("std");
 const symbols = @import("../constants/symbols.zig");
 
-pub fn generatePossibleOperations(len: usize, operations: *std.ArrayList(std.ArrayList(u8)), allocator: *const std.mem.Allocator) !void {
+pub fn generatePossibleOperations(len: usize, operations: *std.ArrayList(std.ArrayList(u8)), allocator: std.mem.Allocator) !void {
   const max: usize = std.math.pow(usize, 2, len);
   
   for (0..max) |num| {
-    var op = std.ArrayList(u8).init(allocator.*);
+    var op = std.ArrayList(u8).init(allocator);
     var index: usize = 0;
 
     for (0..len) |_| {
@@ -19,11 +19,11 @@ pub fn generatePossibleOperations(len: usize, operations: *std.ArrayList(std.Arr
   }
 }
 
-pub fn generatePossibleOperationsV2(len: usize, operations: *std.ArrayList(std.ArrayList(u8)), allocator: *const std.mem.Allocator) !void {
+pub fn generatePossibleOperationsV2(len: usize, operations: *std.ArrayList(std.ArrayList(u8)), allocator: std.mem.Allocator) !void {
   const max: usize = std.math.pow(usize, 3, len);
   
   for (0..max) |num| {
-    var op = std.ArrayList(u8).init(allocator.*);
+    var op = std.ArrayList(u8).init(allocator);
     var index: usize = 0;
 
     var tmp = num;

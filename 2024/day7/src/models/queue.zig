@@ -7,12 +7,12 @@ pub fn Queue(comptime T: type) type {
             data: T,
             next: ?*Node,
         };
-        allocator: *const std.mem.Allocator,
+        allocator: std.mem.Allocator,
         start: ?*Node,
         end: ?*Node,
         size: usize,
 
-        pub fn init(allocator: *const std.mem.Allocator) This {
+        pub fn init(allocator: std.mem.Allocator) This {
             return This{ .allocator = allocator, .start = null, .end = null, .size = 0 };
         }
         pub fn enqueue(this: *This, value: T) !void {
@@ -38,13 +38,12 @@ pub fn Queue(comptime T: type) type {
             return start.data;
         }
 
-        pub fn clear(this: *This) void {
+        pub fn deinit(this: *This) void {
             while (dequeue(this)) |_| {}
         }
 
         pub fn peek(this: *This, len: usize) []const T {
-            const allocator = std.heap.page_allocator;
-            var op: std.ArrayList(u8) = std.ArrayList(u8).init(allocator);
+            var op: std.ArrayList(u8) = std.ArrayList(u8).init(this.allocator);
             var index: usize = 0;
 
             var tmp = this.start;
