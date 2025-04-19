@@ -4,7 +4,7 @@ const renderer = @import("helpers/renderer.zig");
 
 pub fn main() !void {
     const allocator = std.heap.page_allocator;
-    const file = try std.fs.cwd().openFile("data.txt", .{});
+    const file = try std.fs.cwd().openFile("test.txt", .{});
 
     const stream = file.reader();
 
@@ -80,9 +80,9 @@ fn part2Dirty(guard: *coords.Guard(), map: *std.ArrayList(std.ArrayList(u8)), al
                     }
                     
 
-                    // renderer.renderMatrix(map);
+                    renderer.renderMatrix(map);
                     // //Sleep for 500ms to simulate a delay between iterations
-                    // std.time.sleep(25 * std.time.ns_per_ms);
+                    std.time.sleep(10 * std.time.ns_per_ms);
 
                     
                     //Mutate Map with guard's step
@@ -127,7 +127,7 @@ fn part2(guard: *coords.Guard(), map: *std.ArrayList(std.ArrayList(u8))) !void {
     var placeble_looping_obstacles: u32 = 0;
 
     while (guard.inBoundsOf(map)) {
-        // try renderer.clearScreen();
+        try renderer.clearScreen();
 
         //Mutate Map with guard's new position
         if(map.items[@intCast(guard.y)].items[@intCast(guard.x)] != coords.EXTRA_OBSTACLE) {
@@ -135,10 +135,10 @@ fn part2(guard: *coords.Guard(), map: *std.ArrayList(std.ArrayList(u8))) !void {
         }
         
 
-        // renderer.renderMatrix(map);
+        renderer.renderMatrix(map);
 
         // Sleep for 500ms to simulate a delay between iterations
-        // std.time.sleep(100 * std.time.ns_per_ms);
+        std.time.sleep(500 * std.time.ns_per_ms);
 
         
         //Mutate Map with guard's step
@@ -183,15 +183,15 @@ fn part1(guard: *coords.Guard(), map: *std.ArrayList(std.ArrayList(u8)), allocat
     defer set.deinit();
 
     while (guard.inBoundsOf(map)) {
-        // try renderer.clearScreen();
+        try renderer.clearScreen();
 
         //Mutate Map with guard's new position
         map.items[@intCast(guard.y)].items[@intCast(guard.x)] = coords.GUARD_ICON;
 
-        // renderer.renderMatrix(map);
+        renderer.renderMatrix(map);
 
         // Sleep for 500ms to simulate a delay between iterations
-        // std.time.sleep(1 * std.time.ns_per_ms);
+        std.time.sleep(150 * std.time.ns_per_ms);
 
         //Mutate Map with guard's step
         map.items[@intCast(guard.y)].items[@intCast(guard.x)] = coords.GUARD_STEP;
