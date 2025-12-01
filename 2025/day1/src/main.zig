@@ -141,6 +141,7 @@ test "DAY 1 TEST - PART 1" {
     const interface = &reader.interface;
 
     var zeros: u32 = 0;
+    const expected_zeros: u32 = 3;
 
     while (try interface.takeDelimiter('\n')) |line| {
         const move = try parseMove(line);
@@ -152,7 +153,7 @@ test "DAY 1 TEST - PART 1" {
         }
     }
 
-    try std.testing.expectEqual(3, zeros);
+    try std.testing.expectEqual(expected_zeros, zeros);
     std.debug.print("Test PASSED FOR DAY 1 PART 1\n", .{});
 }
 
@@ -168,6 +169,7 @@ test "DAY 1 TEST - PART 2" {
     const interface = &reader.interface;
 
     var zeros: u32 = 0;
+    const expected_zeros: u32 = 6;
 
     while (try interface.takeDelimiter('\n')) |line| {
         const move = try parseMove(line);
@@ -193,7 +195,7 @@ test "DAY 1 TEST - PART 2" {
         point = rotate(point, move.dir, move.amount);
     }
 
-    try std.testing.expectEqual(6, zeros);
+    try std.testing.expectEqual(expected_zeros, zeros);
 
     std.debug.print("Test PASSED FOR DAY 1 PART 2\n", .{});
 }
