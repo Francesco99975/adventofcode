@@ -83,6 +83,12 @@ pub fn build(b: *std.Build) void {
         }),
     });
 
+    exe.root_module.addImport("structlib", b.createModule(.{
+        .root_source_file = b.path("../../../structlib/src/root.zig"),
+        .target = target,
+        .optimize = optimize,
+    }));
+
     // This declares intent for the executable to be installed into the
     // install prefix when running `zig build` (i.e. when executing the default
     // step). By default the install prefix is `zig-out/` but can be overridden

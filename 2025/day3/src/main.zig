@@ -1,5 +1,5 @@
 const std = @import("std");
-const Stack = @import("helpers/structures.zig").Stack;
+const Stack = @import("structlib").Stack;
 
 pub fn main() !void {
     std.debug.print("STARTING DAY 3 - PART 1\n\n", .{});
